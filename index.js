@@ -15,14 +15,12 @@ app.use(bodyParser.json()); app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = 7777;
 
+app.use(cors({
+    origin: '*'
+}));
+
 // Define a simple API endpoint
-app.get('/api/v1/jira/board/:boardNumber', cors({
-    origin: (origin, callback) => {
-        // should be dynamic based on the selcted env
-        callback(null, true);
-    },
-    optionsSuccessStatus: 200,
-}), async (req, res) => {
+app.get('/api/v1/jira/board/:boardNumber', async (req, res) => {
     try {
         const boardId = req.params.boardNumber;
         const auth = basicAuth(req);
