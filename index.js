@@ -42,3 +42,5 @@ app.get('/api/v1/jira/board/:boardNumber', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+module.exports = app
