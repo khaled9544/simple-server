@@ -1,19 +1,32 @@
 // Import necessary modules
 const express = require('express');
 const basicAuth = require('basic-auth');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
 const axios = require('axios');
 
 
 // Create an instance of the Express application
 const app = express();
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json()); app.use(bodyParser.urlencoded({ extended: true }));
+
 const port = 7777;
 
 // Define a simple API endpoint
-app.get('/api/v1/jira/board/:boardNumber', async (req, res) => {
+app.get('/api/v1/jira/board/:boardNumber', cors({
+    origin: (origin, callback) => {
+        // should be dynamic based on the selcted env
+        callback(null, true);
+    },
+    optionsSuccessStatus: 200,
+}), async (req, res) => {
     try {
         const boardId = req.params.boardNumber;
         const auth = basicAuth(req);
-        if(!auth || (auth && (!auth.name || !auth.pass))) {
+        if (!auth || (auth && (!auth.name || !auth.pass))) {
             res.status(401).json({ message: "Authorized" })
             return;
         }
@@ -28,7 +41,7 @@ app.get('/api/v1/jira/board/:boardNumber', async (req, res) => {
         res.json({ status: response.data });
     } catch (exception) {
         console.log(exception);
-        if(exception.response) {
+        if (exception.response) {
             res.status(401).json({ exception: exception.response.data });
             return;
         } else {
