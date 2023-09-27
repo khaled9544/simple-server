@@ -6,7 +6,7 @@ const axios = require('axios');
 
 // Create an instance of the Express application
 const app = express();
-const port = 3000;
+const port = 7777;
 
 // Define a simple API endpoint
 app.get('/api/v1/jira/board/:boardNumber', async (req, res) => {
